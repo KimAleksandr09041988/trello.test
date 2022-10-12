@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>trello</title>
+  <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+  <section class="page">
+    <article class="wrapper">
+      <div class="board">
+
+        <span class="board__title" contenteditable="true">
+          Введите название
+        </span>
+
+        <ul class="board__list">
+          <li class="board__item" draggable="true">
+            Стартовая карточка
+          </li>
+        </ul>
+
+        <form class="board__form">
+
+          <textarea class="board__textarea" placeholder="Введите название для этой карточки"></textarea>
+
+          <div class="board__wrapper-btns">
+            <button class="board__item-btn board__item-btn_action_add">Добавить</button>
+            <button class="board__item-btn board__item-btn_action_cancel">Отмена</button>
+          </div>
+        </form>
+
+        <button class="board__btn">
+          <span class="board__icon">+</span>
+          Добавить карточку
+        </button>
+      </div>
+
+      <button class="wrapper__btn">Добавить доску</button>
+    </article>
+
+  </section>
+
+
+  <script src="./js/index.js"></script>
+</body>
+
+</html>
