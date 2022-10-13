@@ -1,141 +1,141 @@
-const lists = document.querySelectorAll('.board__list');
-const button = document.querySelector('.wrapper__btn');
+const boardLists = document.querySelectorAll('.board__list');
+const wrapperBtn = document.querySelector('.wrapper__btn');
 
-function addTask() {
-  const addBtn = document.querySelector('.board__btn');
-  const addItemBtn = document.querySelector('.board__item-btn_action_add');
-  const cancelItemBtn = document.querySelector('.board__item-btn_action_cancel');
-  const textarea = document.querySelector('.board__textarea');
-  const form = document.querySelector('.board__form');
+function createCard() {
+  const boardBtn = document.querySelector('.board__btn');
+  const boardItemnBtnAdd = document.querySelector('.board__item-btn_action_add');
+  const boardItemnBtnCancel = document.querySelector('.board__item-btn_action_cancel');
+  const boardTextarea = document.querySelector('.board__textarea');
+  const boardForm = document.querySelector('.board__form');
 
   let value;
 
-  addBtn.addEventListener('click', () => {
-    form.style.display = 'block';
-    addBtn.style.display = 'none';
-    addItemBtn.style.display = 'none';
+  boardBtn.addEventListener('click', () => {
+    boardForm.classList.add('board__form_active');
+    boardBtn.classList.add('board__btn_disabled');
+    boardItemnBtnAdd.classList.add('board__item-btn_disabled');
   })
 
-  textarea.addEventListener('input', (e) => {
+  boardTextarea.addEventListener('input', (e) => {
     value = e.target.value;
 
     if (value) {
-      addItemBtn.style.display = 'block';
+      boardItemnBtnAdd.classList.remove('board__item-btn_disabled');
     } else {
-      addItemBtn.style.display = 'none';
+      boardItemnBtnAdd.classList.add('board__item-btn_disabled');
     }
   })
 
-  cancelItemBtn.addEventListener('click', (e) => {
+  boardItemnBtnCancel.addEventListener('click', (e) => {
     e.preventDefault();
-    textarea.value = '';
+    boardTextarea.value = '';
     value = '';
-    form.style.display = 'none';
-    addBtn.style.display = 'flex';
+    boardForm.classList.remove('board__form_active');
+    boardBtn.classList.remove('board__btn_disabled');
   })
 
-  addItemBtn.addEventListener('click', (e) => {
+  boardItemnBtnAdd.addEventListener('click', (e) => {
     e.preventDefault();
     const newItem = document.createElement('li');
     newItem.classList.add('board__item');
     newItem.draggable = true;
     newItem.textContent = value;
-    lists[0].append(newItem);
+    boardLists[0].append(newItem);
 
-    textarea.value = '';
+    boardTextarea.value = '';
     value = '';
-    form.style.display = 'none';
-    addBtn.style.display = 'flex';
+    boardForm.classList.remove('board__form_active');
+    boardBtn.classList.remove('board__btn_disabled');
 
-    dragnDrop();
+    dragandDrop();
   })
 }
 
-addTask();
+createCard();
 
-function addBoard() {
-  const boards = document.querySelector('.wrapper');
+function createBoard() {
+  const wrapper = document.querySelector('.wrapper');
   const board = document.createElement('div');
   board.classList.add('board');
   board.innerHTML = `
     <span contenteditable="true" class="board__title">Введите название</span>
     <ul class="board__list"></ul> `;
 
-  boards.append(board);
+  wrapper.append(board);
 
-  changeTitle();
-  dragnDrop();
+  revomeTextTitle();
+  dragandDrop();
   removeBoard()
 }
 
+// доработать...спросить у стаса)
 function removeBoard() {
-  const boardItems = document.querySelectorAll('.board');
-  for (let k = 1; k < boardItems.length; k++) {
-    let boardItem = boardItems[k];
-    boardItem.addEventListener('dblclick', () => {
-      boardItem.remove();
+  const boards = document.querySelectorAll('.board');
+  for (let k = 1; k < boards.length; k++) {
+    let board = boards[k];
+    board.addEventListener('dblclick', function (e) {
+      if (e.target === e.currentTarget)
+        this.remove();
     });
   }
 }
 
+wrapperBtn.addEventListener('click', createBoard);
 
+function revomeTextTitle() {
+  const boardTitles = document.querySelectorAll('.board__title');
 
-button.addEventListener('click', addBoard);
-
-function changeTitle() {
-  const titles = document.querySelectorAll('.board__title');
-
-  titles.forEach(title => {
-    title.addEventListener('click', e => e.target.textContent = '');
+  boardTitles.forEach(boardTitle => {
+    boardTitle.addEventListener('click', e => e.target.textContent = '');
   })
 }
 
-changeTitle();
+revomeTextTitle();
 
 let draggedItem = null;
 
-function dragnDrop() {
-  const listItems = document.querySelectorAll('.board__item');
-  const lists = document.querySelectorAll('.board__list');
+function dragandDrop() {
+  const boardItems = document.querySelectorAll('.board__item');
+  const boardLists = document.querySelectorAll('.board__list');
 
-  for (let i = 0; i < listItems.length; i++) {
-    const item = listItems[i];
+  for (let i = 0; i < boardItems.length; i++) {
+    const boardItem = boardItems[i];
 
-    item.addEventListener('dragstart', () => {
-      draggedItem = item;
+    boardItem.addEventListener('dragstart', () => {
+      draggedItem = boardItem;
       setTimeout(() => {
-        item.style.display = 'none';
+        boardItem.classList.add('board__item_disabled');
       }, 0)
     });
 
-    item.addEventListener('dragend', () => {
+    boardItem.addEventListener('dragend', () => {
       setTimeout(() => {
-        item.style.display = 'block';
+        boardItem.classList.remove('board__item_disabled');
         draggedItem = null;
       }, 0)
     });
 
-    item.addEventListener('dblclick', () => {
-      item.remove();
+    boardItem.addEventListener('dblclick', () => {
+      boardItem.remove();
     });
 
 
-    for (let j = 0; j < lists.length; j++) {
-      const list = lists[j];
+    for (let j = 0; j < boardLists.length; j++) {
+      const boardList = boardLists[j];
 
-      list.addEventListener('dragover', e => e.preventDefault());
+      boardList.addEventListener('dragover', e => e.preventDefault());
 
-      list.addEventListener('dragenter', function (e) {
+      boardList.addEventListener('dragenter', function (e) {
         e.preventDefault();
-        this.style.backgroundColor = 'rgba(0, 0, 0, .3)';
+        this.classList.add('board__list_style');
       })
 
-      list.addEventListener('dragleave', function (e) {
-        this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+      boardList.addEventListener('dragleave', function (e) {
+        this.classList.remove('board__list_style');
       })
 
-      list.addEventListener('drop', function (e) {
-        this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+      boardList.addEventListener('drop', function (e) {
+        this.classList.remove('board__list_style');
         this.append(draggedItem);
       })
 
@@ -143,4 +143,4 @@ function dragnDrop() {
   }
 };
 
-dragnDrop();
+dragandDrop();
